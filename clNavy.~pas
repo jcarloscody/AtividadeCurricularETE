@@ -1,0 +1,24 @@
+unit clNavy;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TNavy = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Navy: TNavy;
+
+implementation
+
+{$R *.dfm}
+
+end.

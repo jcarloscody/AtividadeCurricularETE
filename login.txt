@@ -1,0 +1,22 @@
+if (Edit1.Text <> '') and ( Edit2.Text <> '') then
+begin
+if ZQuery1.Locate('usuario',Edit1.Text,[])then
+begin
+if ZQuery1senha.Value=Edit2.Text then
+begin
+logen.Hide;
+menuu.ShowModal;
+end;
+end
+else
+begin
+Application.MessageBox('login incorreto!'+ #13+'Você não tem acesso','aviso',MB_ICONQUESTION+MB_OK);
+Edit1.Clear;
+Edit2.Clear;
+Edit1.SetFocus;
+end;
+end
+else
+begin
+Application.MessageBox('preencha todos os campos','aviso',MB_ICONQUESTION + MB_OK);
+end;

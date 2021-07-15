@@ -1,0 +1,162 @@
+CREATE DATABASE `shimsoftware25` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+use shimsoftware25;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`cliente`;
+CREATE TABLE  `shimsoftware25`.`cliente` (
+  `codigo` int(10) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) NOT NULL,
+  `numero` int(10) unsigned NOT NULL,
+  `bairro` varchar(45) NOT NULL,
+  `cidade` varchar(45) NOT NULL,
+  `cep` varchar(45) NOT NULL,
+  `uf` varchar(45) NOT NULL,
+  `cpf` varchar(45) DEFAULT NULL,
+  `cnpj` varchar(45) DEFAULT NULL,
+  `pessoa` varchar(45) NOT NULL,
+  `situacao` varchar(45) NOT NULL,
+  `rua` varchar(45) NOT NULL,
+  `obs` varchar(45) DEFAULT NULL,
+  `compl` varchar(45) DEFAULT NULL,
+  `tel1` int(10) unsigned DEFAULT NULL,
+  `tel2` int(10) unsigned DEFAULT NULL,
+  `e-mail` varchar(45) DEFAULT NULL,
+  `data` date DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`funcionario`;
+CREATE TABLE  `shimsoftware25`.`funcionario` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) NOT NULL,
+  `rua` varchar(45) NOT NULL,
+  `compl` varchar(100) DEFAULT NULL,
+  `bairro` varchar(45) NOT NULL,
+  `cidade` varchar(45) NOT NULL,
+  `cep` int(10) unsigned NOT NULL,
+  `uf` varchar(45) NOT NULL,
+  `cpf` varchar(45) NOT NULL,
+  `salario` double DEFAULT NULL,
+  `situacao` varchar(45) NOT NULL,
+  `obs` varchar(200) DEFAULT NULL,
+  `tel1` int(10) unsigned DEFAULT NULL,
+  `tel2` int(10) unsigned DEFAULT NULL,
+  `e-mail` varchar(45) DEFAULT NULL,
+  `data` date DEFAULT NULL,
+  `foto` varchar(200) DEFAULT NULL,
+  `numero` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`empresa`;
+CREATE TABLE  `shimsoftware25`.`empresa` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fotodaempresa` varchar(100) DEFAULT NULL,
+  `fotopraorelatorio` varchar(200) DEFAULT NULL,
+  `frasedeagradecimentopraorelatorio` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`fornecedor`;
+CREATE TABLE  `shimsoftware25`.`fornecedor` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) NOT NULL,
+  `numero` int(10) unsigned NOT NULL,
+  `bairro` varchar(45) NOT NULL,
+  `cidade` varchar(45) NOT NULL,
+  `cep` int(10) unsigned NOT NULL,
+  `uf` varchar(45) NOT NULL,
+  `compl` varchar(45) DEFAULT NULL,
+  `situacao` varchar(45) NOT NULL,
+  `rua` varchar(45) NOT NULL,
+  `obs` varchar(300) DEFAULT NULL,
+  `tel1` int(10) unsigned DEFAULT NULL,
+  `tel2` int(10) unsigned DEFAULT NULL,
+  `e-mail` varchar(45) DEFAULT NULL,
+  `data` date DEFAULT NULL,
+  `cn` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`estoque`;
+CREATE TABLE  `shimsoftware25`.`estoque` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `produto` varchar(45) NOT NULL,
+  `tipo` varchar(45) DEFAULT NULL,
+  `unidade` varchar(45) DEFAULT NULL,
+  `preco_custo` double DEFAULT NULL,
+  `percentagem_lucro` double DEFAULT NULL,
+  `preco_venda` double DEFAULT NULL,
+  `quantidade` int(10) unsigned DEFAULT NULL,
+  `quantidade_minima` int(10) unsigned DEFAULT NULL,
+  `quantidade_maxima` int(10) unsigned DEFAULT NULL,
+  `situacao` varchar(45) NOT NULL,
+  `observacao` varchar(200) DEFAULT NULL,
+  `data` varchar(30) DEFAULT NULL,
+  `setor` varchar(45) DEFAULT NULL,
+  `codigo_funcionario` int(11) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `fornecedor` (`codigo_funcionario`),
+  CONSTRAINT `fornecedor` FOREIGN KEY (`codigo_funcionario`) REFERENCES `fornecedor` (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`usuario`;
+CREATE TABLE  `shimsoftware25`.`usuario` (
+  `codigo_funcionario` int(11) NOT NULL,
+  `login` varchar(45) NOT NULL,
+  `senha` varchar(45) NOT NULL,
+  `nivel` varchar(45) NOT NULL,
+  `situacao` varchar(45) NOT NULL,
+  KEY `codigo_funcionario` (`codigo_funcionario`),
+  CONSTRAINT `codigo_funcionario` FOREIGN KEY (`codigo_funcionario`) REFERENCES `funcionario` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`saida_pai`;
+CREATE TABLE  `shimsoftware25`.`saida_pai` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo_cliente` int(10) DEFAULT NULL,
+  `data_venda` date DEFAULT NULL,
+  `valor_total` double DEFAULT NULL,
+  `observacao` varchar(200) DEFAULT NULL,
+  `valorrecebido` double DEFAULT NULL,
+  `troco` double DEFAULT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `cliente` (`codigo_cliente`),
+  CONSTRAINT `cliente` FOREIGN KEY (`codigo_cliente`) REFERENCES `cliente` (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`saida_produto`;
+CREATE TABLE  `shimsoftware25`.`saida_produto` (
+  `codigo_saidapai` int(11) NOT NULL,
+  `codigo_produto` int(11) NOT NULL,
+  `quantidade` int(10) unsigned DEFAULT NULL,
+  `valor_total` double DEFAULT NULL,
+  `desconto` double DEFAULT NULL,
+  PRIMARY KEY (`codigo_saidapai`,`codigo_produto`),
+  KEY `produto` (`codigo_produto`),
+  CONSTRAINT `produto` FOREIGN KEY (`codigo_produto`) REFERENCES `estoque` (`codigo`),
+  CONSTRAINT `saidapai` FOREIGN KEY (`codigo_saidapai`) REFERENCES `saida_pai` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`espiao`;
+CREATE TABLE  `shimsoftware25`.`espiao` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo_funcionario` int(11) DEFAULT NULL,
+  `data` date DEFAULT NULL,
+  `hora` time DEFAULT NULL,
+  `local` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `usuario` (`codigo_funcionario`) USING BTREE,
+  CONSTRAINT `funcionario` FOREIGN KEY (`codigo_funcionario`) REFERENCES `usuario` (`codigo_funcionario`)
+) ENGINE=InnoDB AUTO_INCREMENT=412 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `shimsoftware25`.`contas_pagar`;
+CREATE TABLE  `shimsoftware25`.`contas_pagar` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(45) NOT NULL,
+  `vl_total` double NOT NULL,
+  `parcelas` int(10) unsigned NOT NULL,
+  `vl_parcelas` double NOT NULL,
+  `vencimento` date NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -1,0 +1,157 @@
+unit controle_de_estoque;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, DBGrids, Buttons, Mask, DBCtrls, ComCtrls, DB,
+  ZAbstractRODataset, ZAbstractDataset, ZDataset, ExtCtrls, ZAbstractTable,
+  ExtDlgs;
+
+type
+  Tcontrole_estoque = class(TForm)
+    PageControl1: TPageControl;
+    Cadastrar: TTabSheet;
+    Label2: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    SpeedButton11: TSpeedButton;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label7: TLabel;
+    Label21: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    DBEdit11: TDBEdit;
+    DBEdit13: TDBEdit;
+    DBMemo1: TDBMemo;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBComboBox1: TDBComboBox;
+    DBNavigator1: TDBNavigator;
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  controle_estoque: Tcontrole_estoque;
+
+implementation
+
+uses sede_de_coneccao, menu, adiminis_fornecedor;
+
+{$R *.dfm}
+
+procedure Tcontrole_estoque.SpeedButton5Click(Sender: TObject);
+begin
+Fornecedor.Hide;
+
+end;
+
+procedure Tcontrole_estoque.SpeedButton8Click(Sender: TObject);
+begin
+Fornecedor.Hide;
+
+end;
+
+procedure Tcontrole_estoque.SpeedButton2Click(Sender: TObject);
+begin
+sededeconeccao.zt_fornecedordata.asstring:= (formatdatetime('dd/mm/yyyy',now));
+sededeconeccao.zt_fornecedor.insert;
+ShowMessage('Salvo com Sucesso!');
+
+end;
+
+procedure Tcontrole_estoque.SpeedButton3Click(Sender: TObject);
+begin
+if
+messagebox(handle,'Deseja Realmete Cancelar o Cadastramento?','Atenção',mb_iconquestion + mb_yesno + mb_defbutton1) = idno then
+begin
+
+Fornecedor.Show;
+end
+else
+begin
+fornecedor.Hide;
+menuu.showmodal;
+
+end;
+
+end;
+
+procedure Tcontrole_estoque.SpeedButton6Click(Sender: TObject);
+begin
+
+sededeconeccao.zt_fornecedor.post;
+ShowMessage('Edição feita com sucesso!');
+
+
+
+end;
+
+procedure Tcontrole_estoque.SpeedButton7Click(Sender: TObject);
+begin
+if
+messagebox(handle,'Deseja realmente Editar?','Ediçao',mb_iconquestion + mb_yesno + mb_defbutton1) = idno then
+begin
+Abort;
+end
+else
+begin
+sededeconeccao.zt_fornecedor.Delete;
+ShowMessage('Exclução feita com sucesso!');
+
+end;
+
+end;
+
+procedure Tcontrole_estoque.FormShow(Sender: TObject);
+begin
+
+sededeconeccao.zt_estoque.Open;
+sededeconeccao.zt_fornecedor.Open;
+
+end;
+
+
+procedure Tcontrole_estoque.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+sededeconeccao.zt_estoque.Close;
+sededeconeccao.zt_fornecedor.Close;
+controle_estoque.Hide;
+
+end;
+
+
+
+end.
