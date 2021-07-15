@@ -1,0 +1,24 @@
+unit width;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TWhite = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  White: TWhite;
+
+implementation
+
+{$R *.dfm}
+
+end.
